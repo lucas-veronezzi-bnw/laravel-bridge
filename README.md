@@ -1,3 +1,16 @@
+## About the Fork
+This fork add support to the command 'php artisan down' and use the environment variables to pass as options to the command.
+
+You can set the enviroment variables inside the serveless file.
+
+| Command Option | Environment Variable |
+|----------------|----------------------|
+| --redirect     | MAINTENANCE_REDIRECT |
+| --render       | MAINTENANCE_RENDER   |
+| --retry        | MAINTENANCE_RETRY    |
+| --refresh      | MAINTENANCE_REFRESH  |
+| --secret       | MAINTENANCE_SECRET   |
+
 # Bref Laravel Bridge
 
 Run Laravel on AWS Lambda with [Bref](https://bref.sh/).
