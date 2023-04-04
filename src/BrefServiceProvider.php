@@ -102,6 +102,8 @@ class BrefServiceProvider extends ServiceProvider
                 $event->exception
             )
         );
+
+        $this->registerCommands();
     }
 
     /**
@@ -138,5 +140,18 @@ class BrefServiceProvider extends ServiceProvider
         if (Config::get('logging.default') === 'stack') {
             Config::set('logging.default', 'stderr');
         }
+    }
+
+    /**
+     * Register commands
+     *
+     * @return void
+     */
+    protected function registerCommands()
+    {
+        $this->commands([
+            Commands\LambdaUpCommand::class,
+            Commands\LambdaDownCommand::class,
+        ]);
     }
 }

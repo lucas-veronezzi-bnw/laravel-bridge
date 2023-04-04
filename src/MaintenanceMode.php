@@ -19,9 +19,27 @@ class MaintenanceMode
         $file = StorageDirectories::Path . '/framework/down';
 
         if (static::active()) {
-            ! file_exists($file) && file_put_contents($file, '[]');
+            if (!file_exists($file)) {
+                $redirect = $_ENV['MAINTENANCE_REDIRECT'] ?? null;
+                $render = $_ENV['MAINTENANCE_RENDER'] ?? null;
+                $rentry = $_ENV['MAINTENANCE_RETRY'] ?? null;
+                $refresh = $_ENV['MAINTENANCE_REFRESH'] ?? null;
+                $secret = $_ENV['MAINTENANCE_SECRET'] ?? null;
+
+                $command = 'php artisan lambda:down';
+                $command .= $redirect ? " --redirect=\"{$redirect}\"" : '';
+                $command .= $render ? " --render=\"{$render}\"" : '';
+                $command .= $rentry ? " --retry={$rentry}" : '';
+                $command .= $refresh ? " --refresh={$refresh}" : '';
+                $command .= $secret ? " --secret=\"{$secret}\"" : '';
+                $command .= ' 1>&2';
+
+                fwrite(STDERR, "Running '{$command}' to put the appliocation in maintenance\n");
+
+                passthru($command);
+            }
         } else {
-            file_exists($file) && unlink($file);
+            file_exists($file) && passthru('php artisan lambda:up 1>&2');
         }
     }
 
